@@ -50,7 +50,7 @@
 
         <br><hr><br>
 
-        <div><button onclick="window.location.href='/MessageSystem/space.jsp';">返回邮箱空间</button></div>
+        <div><button onclick="window.location.href='/MessageSystem/message.do?behavior=space';">返回邮箱空间</button></div>
 
         <br><hr><br>
     </div>

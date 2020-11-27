@@ -2,7 +2,7 @@ package io.tomoto.model.dao.impl;
 
 import io.tomoto.model.dao.Dao;
 import io.tomoto.model.entity.Message;
-import io.tomoto.util.JdbcUtils;
+import io.tomoto.util.JdbcUtil;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -45,7 +45,7 @@ public class MessageDao implements Dao<Message, Integer> {
 
     @Override
     public Integer create(Message message) {
-        try (Connection connection = JdbcUtils.getConnection()) {
+        try (Connection connection = JdbcUtil.getConnection()) {
             return runner.update(connection, CREATE_STATEMENT,
                     message.getFromUid(), message.getToUid(), message.getTitle(), message.getContent(),
                     message.getRead(), message.getCreateTime());
@@ -57,7 +57,7 @@ public class MessageDao implements Dao<Message, Integer> {
 
     @Override
     public Integer delete(Integer id) {
-        try (Connection connection = JdbcUtils.getConnection()) {
+        try (Connection connection = JdbcUtil.getConnection()) {
             return runner.update(connection, DELETE_STATEMENT, id);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,7 +67,7 @@ public class MessageDao implements Dao<Message, Integer> {
 
     @Override
     public Message read(Integer id) {
-        try (Connection connection = JdbcUtils.getConnection()) {
+        try (Connection connection = JdbcUtil.getConnection()) {
             return runner.query(connection, READ_STATEMENT, new BeanHandler<>(Message.class), id);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -76,7 +76,7 @@ public class MessageDao implements Dao<Message, Integer> {
     }
 
     public List<Message> readByUserId(Integer userId) {
-        try (Connection connection = JdbcUtils.getConnection()) {
+        try (Connection connection = JdbcUtil.getConnection()) {
             return runner.query(connection, READ_BY_USER_ID_STATEMENT, new BeanListHandler<>(Message.class), userId);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,7 +86,7 @@ public class MessageDao implements Dao<Message, Integer> {
 
     @Override
     public List<Message> readAll() {
-        try (Connection connection = JdbcUtils.getConnection()) {
+        try (Connection connection = JdbcUtil.getConnection()) {
             return runner.query(connection, READ_ALL_STATEMENT, new BeanListHandler<>(Message.class));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -96,7 +96,7 @@ public class MessageDao implements Dao<Message, Integer> {
 
     @Override
     public <P> Integer update(Integer id, String propertyName, P propertyValue) {
-        try (Connection connection = JdbcUtils.getConnection()) {
+        try (Connection connection = JdbcUtil.getConnection()) {
             return runner.update(connection,
                     "UPDATE `message` SET `" + propertyName + "` = ? WHERE `id` = ?;", propertyValue, id);
         } catch (SQLException e) {

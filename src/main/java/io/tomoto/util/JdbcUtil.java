@@ -8,14 +8,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class JdbcUtils {
+public class JdbcUtil {
     private static DruidDataSource dataSource = null;
 
     static {
         try {
             Properties properties = new Properties();
             //读取jdbc.properties属性配置文件
-            InputStream inputStream = JdbcUtils.class.getClassLoader().getResourceAsStream("database.properties");
+            InputStream inputStream = JdbcUtil.class.getClassLoader().getResourceAsStream("database.properties");
             //从流中加载数据
             properties.load(inputStream);
             //创建数据库连接池

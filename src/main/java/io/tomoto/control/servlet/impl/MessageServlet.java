@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Tomoto
@@ -20,6 +21,14 @@ import java.io.IOException;
 public class MessageServlet extends BaseServlet {
     private final MessageService messageService = MessageService.getInstance();
     private final UserService userService = UserService.getInstance();
+
+    public void space(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer userId = Integer.parseInt(request.getSession().getAttribute("userId").toString());
+        List<Message> emails = messageService.getUserMessages(userId);
+        request.getSession().setAttribute("emails", emails);
+
+        request.getRequestDispatcher("/space.jsp").forward(request, response);
+    }
 
     public void read(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("id");

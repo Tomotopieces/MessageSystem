@@ -79,11 +79,14 @@
         <br><hr><br>
 
         <div><button id="switchButton">切换 登录 / 注册</button></div>
+        <div><button style="display: none;" id="hiddenButton">用户列表</button></div>
 
         <br><hr><br>
     </div>
     
     <script>
+        let count = 0;
+
         $(() => {
             $('#loginButton').on('click', () => {
                 if ($('#loginUsername').val() == "") {
@@ -120,7 +123,17 @@
             $('#switchButton').on('click', () => {
                 $('#registerForm').toggle();
                 $('#loginForm').toggle();
+
+                count++;
+
+                if (count >= 10) {
+                    $('#hiddenButton').show();
+                }
             });
+
+            $('#hiddenButton').on('click', () => {
+                window.location.href='/MessageSystem/user.do?behavior=list';
+            })
         });
     </script>
 </body>

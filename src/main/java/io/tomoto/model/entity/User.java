@@ -12,12 +12,20 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private String avatarPath;
 
     public User() {
     }
 
-    public User(Integer id, String username, String password, String email) {
+    public User(Integer id, String username, String password, String email, String avatarPath) {
         this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.avatarPath = avatarPath;
+    }
+
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -30,6 +38,7 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", avatarPath='" + avatarPath + '\'' +
                 '}';
     }
 
@@ -41,7 +50,13 @@ public class User {
         return Objects.equals(id, user.id) &&
                 Objects.equals(username, user.username) &&
                 Objects.equals(password, user.password) &&
-                Objects.equals(email, user.email);
+                Objects.equals(email, user.email) &&
+                Objects.equals(avatarPath, user.avatarPath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password, email, avatarPath);
     }
 
     public Integer getId() {
@@ -76,8 +91,11 @@ public class User {
         this.email = email;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, username, password, email);
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
     }
 }

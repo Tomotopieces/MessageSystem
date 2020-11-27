@@ -2,7 +2,7 @@ package io.tomoto.model.dao.impl;
 
 import io.tomoto.model.dao.Dao;
 import io.tomoto.model.entity.User;
-import io.tomoto.util.JdbcUtils;
+import io.tomoto.util.JdbcUtil;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -26,11 +26,11 @@ public class UserDao implements Dao<User, Integer> {
     private static final String DELETE_STATEMENT =
             "DELETE FROM `user` WHERE `id` = ?";
     private static final String READ_STATEMENT =
-            "SELECT `id`, `username`, `password`, `email` FROM `user` WHERE `id` = ?;";
+            "SELECT `id`, `username`, `password`, `email`, `avatarPath` FROM `user` WHERE `id` = ?;";
     private static final String READ_BY_USERNAME_STATEMENT =
-            "SELECT `id`, `username`, `password`, `email` FROM `user` WHERE `username` = ?;";
+            "SELECT `id`, `username`, `password`, `email`, `avatarPath` FROM `user` WHERE `username` = ?;";
     private static final String READ_ALL_STATEMENT =
-            "SELECT `id`, `username`, `password`, `email` FROM `user`;";
+            "SELECT `id`, `username`, `password`, `email`, `avatarPath` FROM `user`;";
     private static final String UPDATE_STATEMENT =
             "UPDATE `user` SET ? = ? WHERE `id` = ?;";
 
@@ -45,7 +45,7 @@ public class UserDao implements Dao<User, Integer> {
 
     @Override
     public Integer create(User user) {
-        try (Connection connection = JdbcUtils.getConnection()) {
+        try (Connection connection = JdbcUtil.getConnection()) {
             return runner.update(connection, CREATE_STATEMENT, user.getUsername(), user.getPassword(), user.getEmail());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -55,7 +55,7 @@ public class UserDao implements Dao<User, Integer> {
 
     @Override
     public Integer delete(Integer id) {
-        try (Connection connection = JdbcUtils.getConnection()) {
+        try (Connection connection = JdbcUtil.getConnection()) {
             return runner.update(connection, DELETE_STATEMENT, id);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -65,7 +65,7 @@ public class UserDao implements Dao<User, Integer> {
 
     @Override
     public User read(Integer id) {
-        try (Connection connection = JdbcUtils.getConnection()) {
+        try (Connection connection = JdbcUtil.getConnection()) {
             return runner.query(connection, READ_STATEMENT, new BeanHandler<>(User.class), id);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,7 +74,7 @@ public class UserDao implements Dao<User, Integer> {
     }
 
     public User readByUsername(String username) {
-        try (Connection connection = JdbcUtils.getConnection()) {
+        try (Connection connection = JdbcUtil.getConnection()) {
             return runner.query(connection, READ_BY_USERNAME_STATEMENT, new BeanHandler<>(User.class), username);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -84,7 +84,7 @@ public class UserDao implements Dao<User, Integer> {
 
     @Override
     public List<User> readAll() {
-        try (Connection connection = JdbcUtils.getConnection()) {
+        try (Connection connection = JdbcUtil.getConnection()) {
             return runner.query(connection, READ_ALL_STATEMENT, new BeanListHandler<>(User.class));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -94,9 +94,10 @@ public class UserDao implements Dao<User, Integer> {
 
     @Override
     public <P> Integer update(Integer id, String propertyName, P propertyValue) {
-        try (Connection connection = JdbcUtils.getConnection()) {
+        try (Connection connection = JdbcUtil.getConnection()) {
             return runner.update(connection,
-                    "UPDATE `user` SET `" + propertyName + "` = ? WHERE `id` = ?;", propertyValue, id);
+                    new StringBuilder("UPDATE `user` SET `").append(propertyName).append("` = ? WHERE `id` = ?;").toString(),
+                    propertyValue, id);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -17,7 +17,13 @@
     <style>
         #userBar {
             margin-left: 35px;
+            vertical-align: top;
             text-align: left;
+        }
+
+        #avatar {
+            float: left;
+            margin-right: 30px;
         }
 
         #emails {
@@ -36,7 +42,6 @@
         .emailTitle {
             text-decoration: none;
             font-size: 20px;
-            font-weight: bold;
         }
 
         .emailTitle:hover {
@@ -47,23 +52,32 @@
 
 <body>
     <div id="mainContent">
-        <br><hr><br>
+        <br>
+        <hr><br>
 
         <h1>邮箱空间</h1>
 
-        <br><hr><br>
+        <br>
+        <hr><br>
 
         <div id="userBar">
+            <img id="avatar" width="64px" src="${avatar}" alt="avatar">
             您好，${username}。
-            <br><br>
             <button onclick="window.location.href='/MessageSystem/user.do?behavior=logout'">注销</button>
+            <form style="text-align: left;" action="user.do?behavior=uploadAvatar" method="POST" enctype="multipart/form-data">
+                上传头像: <input type="file" name="file"><br>
+                <input type="submit" value="上传">
+                <input id="downloadButton" type="button" value="下载">
+            </form>
+            <!-- <button onclick="window.location.href='/MessageSystem/user.do?behavior=downloadAvatar'">下载</button> -->
         </div>
 
-        <br><hr><br>
+        <br>
+        <hr><br>
 
         <ul id="emails">
             <%
-                List<Message> emails = (List<Message>) request.getAttribute("emails");
+                List<Message> emails = (List<Message>) request.getSession().getAttribute("emails");
                 if (emails != null) {
                     for (Message email : emails) {
                         if (email.getRead()) {
@@ -84,14 +98,19 @@
             %>
         </ul>
 
-        <br><hr><br>
+        <br>
+        <hr><br>
     </div>
 
     <script>
         $(() => {
-            $('.emailTitle').on('click', function() {
+            $('.emailTitle').on('click', function () {
                 let id = $(this).attr('id');
                 window.location.replace("/MessageSystem/message.do?behavior=read&id=" + id);
+            });
+
+            $('#downloadButton').on('click', () => {
+                window.location.href='/MessageSystem/user.do?behavior=downloadAvatar';
             });
         });
     </script>
